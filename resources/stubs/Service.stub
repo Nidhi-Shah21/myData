@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Http\{{name}}\Services;
+
+use App\Http\{{name}}\Repositories\{{name}}Repository;
+use Exception;
+use DB;
+
+class {{name}}Service
+{
+    private ${{name}}Repository;
+
+    public function __construct({{name}}Repository ${{name}}Repository)
+    {
+        $this->{{name}}Repository = ${{name}}Repository;
+    }
+
+    public function storeData($request)
+    {
+        try {
+            DB::beginTransaction();
+            $data = [
+                'name' => $request->input('name'),
+            ];
+
+            $result = $request->has('id')
+                ? $this->{{name}}Repository->update($request->id, $data)
+                : $this->{{name}}Repository->store($data);
+
+            DB::commit();
+            return successResponse(__('messages.{{name}}.creation_successful'), $result);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return errorResponse(__('messages.{{name}}.creation_failed'));
+        }
+    }
+}

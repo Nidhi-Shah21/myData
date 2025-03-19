@@ -59,7 +59,7 @@ class GoogleCalendarController extends Controller
                 'end' => ['dateTime' => '2025-03-18T11:00:00', 'timeZone' => 'Australia/Melbourne'],
                 'reminders' => ['useDefault' => TRUE],
             ]);
-
+            // $calendarId = 'c_681714dcf422f44e53c35750a15aa3a11d130720e70fdde8f37f265ed676aca7@group.calendar.google.com';
             $calendarId = 'primary';
             $service->events->insert($calendarId, $event);
 

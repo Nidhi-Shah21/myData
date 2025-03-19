@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Http\{{name}}\Controllers;
+
+use App\Http\Controllers\Controller;
+use App\Http\{{name}}\Repositories\{{name}}Repository;
+use App\Http\{{name}}\Request\{{name}}Request;
+use Illuminate\Http\Request;
+
+class {{name}}Controller extends Controller
+{
+    protected ${{name}}Repository;
+
+    public function __construct({{name}}Repository ${{name}}Repository)
+    {
+        $this->{{name}}Repository = ${{name}}Repository;
+    }
+
+    public function index()
+    {
+        return $this->{{name}}Repository->getAll();
+    }
+
+    public function store({{name}}Request $request)
+    {
+        return $this->{{name}}Repository->store($request->validated());
+    }
+
+    public function show($id)
+    {
+        return $this->{{name}}Repository->find($id);
+    }
+
+    public function update({{name}}Request $request, $id)
+    {
+        return $this->{{name}}Repository->update($id, $request->validated());
+    }
+
+    public function destroy($id)
+    {
+        return $this->{{name}}Repository->delete($id);
+    }
+}

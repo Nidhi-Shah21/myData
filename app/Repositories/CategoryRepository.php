@@ -18,10 +18,10 @@ class CategoryRepository extends BaseRepository
     {
         try {
             $categories = parent::getAll();
-            return successResponse('Categories fetched successfully', $categories);
+            return successResponse(__('messages.category.fetch_success'), $categories);
         } catch (Exception $e) {
             writeLog('error', 'Error fetching categories', ['exception' => $e->getMessage()]);
-            return errorResponse('Failed to fetch categories', 500);
+            return errorResponse(__('messages.category.fetch_error'), 500);
         }
     }
 
@@ -29,13 +29,13 @@ class CategoryRepository extends BaseRepository
     {
         try {
             $category = parent::find($id);
-            return successResponse('Category found', $category);
+            return successResponse(__('messages.category.fetch_success'), $category);
         } catch (ModelNotFoundException $e) {
             writeLog('warning', 'Category not found', ['id' => $id]);
-            return notFoundResponse('Category not found');
+            return notFoundResponse(__('messages.category.not_found'));
         } catch (Exception $e) {
             writeLog('error', 'Error fetching category', ['exception' => $e->getMessage(), 'id' => $id]);
-            return errorResponse('Failed to fetch category', 500);
+            return errorResponse(__('messages.category.fetch_error'), 500);
         }
     }
 
@@ -44,10 +44,10 @@ class CategoryRepository extends BaseRepository
         try {
             $data['slug'] = Str::slug($data['name']);
             $category = parent::store($data);
-            return successResponse('Category created successfully', $category);
+            return successResponse(__('messages.category.create_success'), $category);
         } catch (Exception $e) {
             writeLog('error', 'Error creating category', ['exception' => $e->getMessage(), 'data' => $data]);
-            return errorResponse('Failed to create category', 500);
+            return errorResponse(__('messages.category.create_error'), 500);
         }
     }
 
@@ -55,13 +55,13 @@ class CategoryRepository extends BaseRepository
     {
         try {
             $category = parent::update($id, $data);
-            return successResponse('Category updated successfully', $category);
+            return successResponse(__('messages.category.update_success'), $category);
         } catch (ModelNotFoundException $e) {
             writeLog('warning', 'Category not found for update', ['id' => $id]);
-            return notFoundResponse('Category not found');
+            return notFoundResponse(__('messages.category.not_found'));
         } catch (Exception $e) {
             writeLog('error', 'Error updating category', ['exception' => $e->getMessage(), 'id' => $id, 'data' => $data]);
-            return errorResponse('Failed to update category', 500);
+            return errorResponse(__('messages.category.update_error'), 500);
         }
     }
 
@@ -69,13 +69,13 @@ class CategoryRepository extends BaseRepository
     {
         try {
             parent::delete($id);
-            return successResponse('Category deleted successfully');
+            return successResponse(__('messages.category.delete_success'));
         } catch (ModelNotFoundException $e) {
             writeLog('warning', 'Category not found for deletion', ['id' => $id]);
-            return notFoundResponse('Category not found');
+            return notFoundResponse(__('messages.category.not_found'));
         } catch (Exception $e) {
             writeLog('error', 'Error deleting category', ['exception' => $e->getMessage(), 'id' => $id]);
-            return errorResponse('Failed to delete category', 500);
+            return errorResponse(__('messages.category.delete_error'), 500);
         }
     }
 }

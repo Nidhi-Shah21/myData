@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\{{name}}\Repositories;
+
+use App\Http\{{name}}\Models\{{name}};
+use App\Http\{{name}}\Resources\{{name}}Resource;
+use App\Repositories\BaseRepository;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
+use Illuminate\Support\Str;
+
+class {{name}}Repository extends BaseRepository
+{
+    public function __construct({{name}} $model)
+    {
+        parent::__construct($model);
+    }
+
+    public function getAll()
+    {
+        try {
+            $items = parent::getAll();
+            return successResponse(__('messages.{{nameLower}}.fetch_success'), $items);
+        } catch (Exception $e) {
+            writeLog('error', 'Error fetching {{nameLower}}s', ['exception' => $e->getMessage()]);
+            return errorResponse(__('messages.{{nameLower}}.fetch_error'), 500);
+        }
+    }
+
+    public function find($id)
+    {
+        try {
+            $item = parent::find($id);
+            return successResponse(__('messages.{{nameLower}}.fetch_success'), $item);
+        } catch (ModelNotFoundException $e) {
+            writeLog('warning', '{{name}} not found', ['id' => $id]);
+            return notFoundResponse(__('messages.{{nameLower}}.not_found'));
+        } catch (Exception $e) {
+            writeLog('error', 'Error fetching {{nameLower}}', ['exception' => $e->getMessage(), 'id' => $id]);
+            return errorResponse(__('messages.{{nameLower}}.fetch_error'), 500);
+        }
+    }
+
+    public function store(array $data)
+    {
+        try {
+            $data['slug'] = Str::slug($data['name']);
+            $item = parent::store($data);
+            return successResponse(__('messages.{{nameLower}}.create_success'), $item);
+        } catch (Exception $e) {
+            writeLog('error', 'Error creating {{nameLower}}', ['exception' => $e->getMessage(), 'data' => $data]);
+            return errorResponse(__('messages.{{nameLower}}.create_error'), 500);
+        }
+    }
+
+    public function update($id, array $data)
+    {
+        try {
+            $item = parent::update($id, $data);
+            return successResponse(__('messages.{{nameLower}}.update_success'), $item);
+        } catch (ModelNotFoundException $e) {
+            writeLog('warning', '{{name}} not found for update', ['id' => $id]);
+            return notFoundResponse(__('messages.{{nameLower}}.not_found'));
+        } catch (Exception $e) {
+            writeLog('error', 'Error updating {{nameLower}}', ['exception' => $e->getMessage(), 'id' => $id, 'data' => $data]);
+            return errorResponse(__('messages.{{nameLower}}.update_error'), 500);
+        }
+    }
+
+    public function delete($id)
+    {
+        try {
+            parent::delete($id);
+            return successResponse(__('messages.{{nameLower}}.delete_success'));
+        } catch (ModelNotFoundException $e) {
+            writeLog('warning', '{{name}} not found for deletion', ['id' => $id]);
+            return notFoundResponse(__('messages.{{nameLower}}.not_found'));
+        } catch (Exception $e) {
+            writeLog('error', 'Error deleting {{nameLower}}', ['exception' => $e->getMessage(), 'id' => $id]);
+            return errorResponse(__('messages.{{nameLower}}.delete_error'), 500);
+        }
+    }
+}

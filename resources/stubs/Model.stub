@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\{{name}}\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class {{name}} extends Model
+{
+    use HasFactory, SoftDeletes;
+
+    protected $table = '{{table_name}}'; // Replace with actual table name
+
+    protected $fillable = [
+        'name', // Add other fields as necessary
+    ];
+}
